@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { useState, type FormEvent } from "react";
 import { motion } from "motion/react";
 import { 
   CheckCircle2, 
@@ -19,8 +20,14 @@ import {
   ArrowRight,
   HardHat,
   Building2,
-  Layout
+  Layout,
+  Loader2
 } from "lucide-react";
+
+/** FormSubmit destination — override with VITE_FORMSUBMIT_EMAIL in `.env` */
+const FORMSUBMIT_EMAIL =
+  (import.meta.env.VITE_FORMSUBMIT_EMAIL as string | undefined)?.trim() ||
+  "martensiteservices@gmail.com";
 
 const SectionHeader = ({ title, subtitle, light = false }: { title: string; subtitle?: string; light?: boolean }) => (
   <div className="mb-12 text-center">
@@ -92,6 +99,40 @@ const PackageCard = ({ name, price, description, features, highlighted = false }
 );
 
 export default function App() {
+  const [contactSubmitting, setContactSubmitting] = useState(false);
+  const [contactStatus, setContactStatus] = useState<"idle" | "success" | "error">("idle");
+
+  async function handleContactSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setContactStatus("idle");
+    setContactSubmitting(true);
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+    fd.append("_subject", "Martensite — website contact form");
+    fd.append("_template", "table");
+
+    try {
+      const res = await fetch(
+        `https://formsubmit.co/ajax/${encodeURIComponent(FORMSUBMIT_EMAIL)}`,
+        {
+          method: "POST",
+          body: fd,
+          headers: { Accept: "application/json" },
+        }
+      );
+      const data = (await res.json().catch(() => ({}))) as { success?: string; message?: string };
+      if (!res.ok || data.success === "false") {
+        throw new Error(data.message || "Request failed");
+      }
+      form.reset();
+      setContactStatus("success");
+    } catch {
+      setContactStatus("error");
+    } finally {
+      setContactSubmitting(false);
+    }
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900 selection:bg-slate-900 selection:text-white">
       {/* Navigation */}
@@ -423,20 +464,56 @@ export default function App() {
             </div>
             
             <div className="bg-white p-10 rounded-[2rem] shadow-xl shadow-slate-200/50 border border-slate-100">
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={handleContactSubmit} noValidate>
+                <input
+                  type="text"
+                  name="_gotcha"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  className="hidden"
+                  aria-hidden="true"
+                />
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-700">Name</label>
-                    <input type="text" className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900 transition-all" placeholder="John Doe" />
+                    <label htmlFor="contact-name" className="text-sm font-medium text-slate-700">
+                      Name
+                    </label>
+                    <input
+                      id="contact-name"
+                      name="name"
+                      type="text"
+                      required
+                      className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900 transition-all"
+                      placeholder="John Doe"
+                      autoComplete="name"
+                    />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-700">Email</label>
-                    <input type="email" className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900 transition-all" placeholder="john@example.com" />
+                    <label htmlFor="contact-email" className="text-sm font-medium text-slate-700">
+                      Email
+                    </label>
+                    <input
+                      id="contact-email"
+                      name="email"
+                      type="email"
+                      required
+                      className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900 transition-all"
+                      placeholder="john@example.com"
+                      autoComplete="email"
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">Project Type</label>
-                  <select className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900 transition-all">
+                  <label htmlFor="contact-project" className="text-sm font-medium text-slate-700">
+                    Project Type
+                  </label>
+                  <select
+                    id="contact-project"
+                    name="project"
+                    required
+                    className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900 transition-all"
+                  >
+                    <option value="">Select a project type</option>
                     <option>End-of-Lease Turnover</option>
                     <option>Martensite Builders Project</option>
                     <option>Residential Renovation</option>
@@ -444,11 +521,41 @@ export default function App() {
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">Message</label>
-                  <textarea rows={4} className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900 transition-all" placeholder="Tell us about your project..."></textarea>
+                  <label htmlFor="contact-message" className="text-sm font-medium text-slate-700">
+                    Message
+                  </label>
+                  <textarea
+                    id="contact-message"
+                    name="message"
+                    rows={4}
+                    required
+                    className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900 transition-all"
+                    placeholder="Tell us about your project..."
+                  />
                 </div>
-                <button className="w-full py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/20">
-                  Send Message
+                {contactStatus === "success" && (
+                  <p className="text-sm text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3">
+                    Thanks — your message was sent. We will get back to you soon.
+                  </p>
+                )}
+                {contactStatus === "error" && (
+                  <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+                    Something went wrong. Please try again or email us directly.
+                  </p>
+                )}
+                <button
+                  type="submit"
+                  disabled={contactSubmitting}
+                  className="w-full py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/20 disabled:opacity-60 disabled:pointer-events-none flex items-center justify-center gap-2"
+                >
+                  {contactSubmitting ? (
+                    <>
+                      <Loader2 className="animate-spin" size={20} />
+                      Sending…
+                    </>
+                  ) : (
+                    "Send Message"
+                  )}
                 </button>
               </form>
             </div>
