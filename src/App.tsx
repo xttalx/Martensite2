@@ -138,14 +138,14 @@ export default function App() {
       {/* Navigation — ad-landing friendly: services in-header + Contact us */}
       <nav className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm shadow-slate-900/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 md:py-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-6">
-          <a href="#" className="flex items-center gap-3 shrink-0 min-w-0">
+          <div className="flex items-center gap-3 shrink-0">
             <div className="flex flex-col leading-tight">
-              <span className="font-bold text-lg sm:text-xl tracking-tight text-slate-900">Martensite</span>
-              <span className="text-[9px] sm:text-[10px] text-slate-500 font-bold uppercase tracking-widest truncate">
-                Builders · Lease Services · martensite.ca
+              <span className="font-bold text-xl tracking-tight">Martensite Builders</span>
+              <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
+                Martensite Lease Services Ltd.
               </span>
             </div>
-          </a>
+          </div>
 
           <div className="flex flex-1 flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2 sm:gap-3 min-w-0">
             <div
