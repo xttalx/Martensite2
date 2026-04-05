@@ -135,26 +135,60 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900 selection:bg-slate-900 selection:text-white">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-bottom border-slate-200">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+      {/* Navigation — ad-landing friendly: services in-header + Contact us */}
+      <nav className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm shadow-slate-900/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 md:py-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-6">
+          <a href="#" className="flex items-center gap-3 shrink-0 min-w-0">
             <div className="flex flex-col leading-tight">
-              <span className="font-bold text-xl tracking-tight">Martensite Builders</span>
-              <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Martensite Lease Services Ltd.</span>
+              <span className="font-bold text-lg sm:text-xl tracking-tight text-slate-900">Martensite</span>
+              <span className="text-[9px] sm:text-[10px] text-slate-500 font-bold uppercase tracking-widest truncate">
+                Builders · Lease Services · martensite.ca
+              </span>
             </div>
-          </div>
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-            <a href="#turnovers" className="hover:text-slate-900 transition-colors">Turnovers</a>
-            <a href="#builders" className="hover:text-slate-900 transition-colors">Builders</a>
-            <a href="#renovations" className="hover:text-slate-900 transition-colors">Renovations</a>
-            <a href="#contact" className="bg-slate-900 text-white px-5 py-2.5 rounded-full hover:bg-slate-800 transition-colors">Get a Quote</a>
+          </a>
+
+          <div className="flex flex-1 flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2 sm:gap-3 min-w-0">
+            <div
+              className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 rounded-2xl border border-slate-200 bg-slate-50/90 px-2.5 py-2 sm:px-4 sm:py-2.5 shadow-inner shadow-white/60"
+              role="navigation"
+              aria-label="Core services"
+            >
+              <span className="hidden sm:inline text-[10px] font-bold uppercase tracking-wider text-slate-400 pr-1">
+                Services
+              </span>
+              <a
+                href="#turnovers"
+                className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-sm font-bold text-slate-800 bg-white border border-slate-200 shadow-sm hover:border-slate-900 hover:text-slate-900 transition-colors"
+              >
+                Turnover
+              </a>
+              <a
+                href="#renovations"
+                className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-sm font-bold text-slate-800 bg-white border border-slate-200 shadow-sm hover:border-slate-900 hover:text-slate-900 transition-colors"
+              >
+                Reno
+              </a>
+              <a
+                href="#builders"
+                className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-sm font-bold text-slate-800 bg-white border border-slate-200 shadow-sm hover:border-slate-900 hover:text-slate-900 transition-colors"
+              >
+                Builders
+              </a>
+            </div>
+
+            <a
+              href="#contact"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-slate-900 text-white hover:bg-slate-800 transition-colors shadow-md shadow-slate-900/15 whitespace-nowrap shrink-0"
+            >
+              <Mail size={16} className="opacity-90" aria-hidden />
+              Contact us
+            </a>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <header className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden">
+      <header className="relative pt-40 pb-20 md:pt-44 md:pb-32 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="max-w-3xl">
             <motion.div 
@@ -163,24 +197,24 @@ export default function App() {
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-sm font-medium mb-6"
             >
               <span className="w-2 h-2 rounded-full bg-slate-400 animate-pulse" />
-              Serving Winnipeg & Surrounding Areas
+              Winnipeg & area · martensite.ca
             </motion.div>
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] mb-8"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-6"
             >
-              When Tenants Leave — <br />
-              <span className="text-slate-400">We Make It Rent-Ready.</span>
+              Turnover, Reno &amp; Builders — <br />
+              <span className="text-slate-500">One team for your property.</span>
             </motion.h1>
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-xl text-slate-600 mb-10 leading-relaxed max-w-2xl"
+              className="text-lg sm:text-xl text-slate-600 mb-10 leading-relaxed max-w-2xl"
             >
-              Professional end-of-lease property turnover services. We handle the deep cleaning, painting, and repairs so you can focus on your next tenant.
+              End-of-lease make-ready, renovations, and Martensite Builders projects — built for landlords, property managers, and homeowners who need reliable results fast.
             </motion.p>
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -189,11 +223,11 @@ export default function App() {
               className="flex flex-col sm:flex-row gap-4"
             >
               <a href="#contact" className="px-8 py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-800 transition-all flex items-center justify-center gap-2 group">
-                Request a Quote
+                Contact us — free quote
                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </a>
               <a href="#turnovers" className="px-8 py-4 bg-white border border-slate-200 text-slate-900 rounded-2xl font-bold hover:bg-slate-50 transition-all text-center">
-                View Services
+                Explore Turnover
               </a>
             </motion.div>
           </div>
